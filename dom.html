@@ -8,15 +8,12 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../css/jsplumbtoolkit.css">
-    <link rel="stylesheet" href="../../css/jsplumbtoolkit-demo.css">
+    <link rel="stylesheet" href="node_modules/@jsplumb/browser-ui/css/jsplumbtoolkit.css">
     <link rel="stylesheet" href="demo.css">
 
 </head>
 
-    <body data-demo-id="lists">
-
-    <a style="margin:10px 0 0 10px;display:inline-block" href="https://jsplumbtoolkit.com"><img src="../../img/logo-jsplumb-green.png"></a>
+    <body>
 
         <div class="jtk-demo-main">
 
@@ -127,13 +124,13 @@ instance.addList(list1Ul, {
                     This list's placeholder endpoint is configured via the `ListStyle` default on the instance:
                 </p>
 <pre>
-var instance = jsPlumb.getInstance({
-    Connector: "Straight",
-    PaintStyle: { strokeWidth: 3, stroke: "#ffa500", "dashstyle": "2 4" },
-    Endpoint: [ "Dot", { radius: 5 } ],
-    EndpointStyle: { fill: "#ffa500" },
-    Container: "canvas",
-    ListStyle:{
+var instance = jsPlumbBrowserUI.getInstance({
+    connector: "Straight",
+    paintStyle: { strokeWidth: 3, stroke: "#ffa500", "dashstyle": "2 4" },
+    endpoint: [ "Dot", { radius: 5 } ],
+    endpointStyle: { fill: "#ffa500" },
+    container: "canvas",
+    listStyle:{
         endpoint:[ "Rectangle", { width:30, height:30 }]
     }
 });
@@ -159,14 +156,12 @@ var instance = jsPlumb.getInstance({
         </div>
 
         <!-- JS -->
-        <script src="../../dist/dom/js/jsplumb.dom.umd.js"></script>
+        <script src="node_modules/@jsplumb/community-core/js/jsplumb.core.umd.js"></script>
+        <script src="node_modules/@jsplumb/browser-ui/js/jsplumb.browser-ui.umd.js"></script>
         <!-- /JS -->
 
         <!--  demo code -->
         <script src="demo.js"></script>
-
-        <!-- demo list -->
-        <script src="../demo-list.js"></script>
 
     </body>
 </html>

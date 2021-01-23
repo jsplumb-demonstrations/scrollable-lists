@@ -1,6 +1,6 @@
-jsPlumb.ready(function () {
+jsPlumbBrowserUI.ready(function () {
 
-    var instance = jsPlumb.newInstance({
+    var instance = jsPlumbBrowserUI.newInstance({
         connector: "Straight",
         paintStyle: { strokeWidth: 3, stroke: "#ffa500", "dashstyle": "2 4" },
         endpoint: [ "Dot", { radius: 5 } ],
@@ -79,6 +79,4 @@ jsPlumb.ready(function () {
     instance.on(document, "change", "[type='checkbox']", function(e) {
         instance[e.srcElement.checked ? "addList" : "removeList"](e.srcElement.value === "list1" ? list1Ul : list2Ul);
     });
-
-    //jsPlumb.fire("jsPlumbDemoLoaded", instance);
 });
