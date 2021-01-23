@@ -1,3 +1,8 @@
+#canvas {
+    width:100vw;
+    height:100vh;
+}
+
 #list-one {
     left:50px;
     top:100px;
