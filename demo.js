@@ -5,7 +5,7 @@ jsPlumbBrowserUI.ready(function () {
         paintStyle: { strokeWidth: 3, stroke: "#ffa500", "dashstyle": "2 4" },
         endpoint: [ "Dot", { radius: 5 } ],
         endpointStyle: { fill: "#ffa500" },
-        container: "canvas",
+        container: canvas,
         listStyle:{
             endpoint:[ "Rectangle", { width:30, height:30 }]
         }
