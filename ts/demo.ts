@@ -1,20 +1,23 @@
-jsPlumbBrowserUI.ready(function () {
+import { ready, newInstance } from "@jsplumb/browser-ui"
+import { Connection, EVENT_CLICK } from "@jsplumb/core"
 
-    var instance = jsPlumbBrowserUI.newInstance({
+ready(() => {
+
+    const canvas = document.getElementById("canvas")
+
+    const instance = newInstance({
         connector: "Straight",
         paintStyle: { strokeWidth: 3, stroke: "#ffa500", "dashstyle": "2 4" },
-        endpoint: [ "Dot", { radius: 5 } ],
+        endpoint: { type:"Dot", options:{ radius: 5 } },
         endpointStyle: { fill: "#ffa500" },
         container: canvas,
         listStyle:{
-            endpoint:[ "Rectangle", { width:30, height:30 }]
+            endpoint:{type:"Rectangle", options:{ width:30, height:30 }}
         }
     });
 
-    window.jsp = instance;
-
     // get the two elements that contain a list inside them
-    var list1El = document.querySelector("#list-one"),
+    const list1El = document.querySelector("#list-one"),
         list2El = document.querySelector("#list-two"),
         list1Ul = list1El.querySelector("ul"),
         list2Ul = list2El.querySelector("ul");
@@ -23,21 +26,21 @@ jsPlumbBrowserUI.ready(function () {
     instance.manage(list2El);
 
     // get uls
-    var lists = document.querySelectorAll("ul");
+    const lists = document.querySelectorAll("ul");
 
     // suspend drawing and initialise.
     instance.batch(function () {
 
-        var selectedSources = [], selectedTargets = [];
+        const selectedSources = [], selectedTargets = [];
 
-        for (var l = 0; l < lists.length; l++) {
+        for (let l = 0; l < lists.length; l++) {
 
-            var isSource = lists[l].getAttribute("source") != null,
-                isTarget = lists[l].getAttribute("target") != null;
+            const isSource = lists[l].getAttribute("source") != null,
+                isTarget = lists[l].getAttribute("target") != null
 
             // configure items
-            var items = lists[l].querySelectorAll("li");
-            for (var i = 0; i < items.length; i++) {
+            const items = lists[l].querySelectorAll("li")
+            for (let i = 0; i < items.length; i++) {
 
                 if (isSource) {
                     instance.makeSource(items[i], {
@@ -61,8 +64,8 @@ jsPlumbBrowserUI.ready(function () {
             }
         }
 
-        var connCount = Math.min(selectedSources.length, selectedTargets.length);
-        for (var i = 0; i < connCount; i++) {
+        const connCount = Math.min(selectedSources.length, selectedTargets.length);
+        for (let i = 0; i < connCount; i++) {
             instance.connect({source:selectedSources[i], target:selectedTargets[i]});
         }
     });
@@ -70,13 +73,13 @@ jsPlumbBrowserUI.ready(function () {
     // configure list1Ul manually, as it does not have a `jtk-scrollable-list` attribute, whereas list2Ul does, and is therefore
     // configured automatically.
     instance.addList(list1Ul, {
-        endpoint:["Rectangle", {width:20, height:20}]
+        endpoint:{type:"Rectangle", options:{width:20, height:20}}
     });
 
 
-    instance.bind("click", function(c) { instance.deleteConnection(c); });
+    instance.bind(EVENT_CLICK, (c:Connection) => { instance.deleteConnection(c) })
 
-    instance.on(document, "change", "[type='checkbox']", function(e) {
-        instance[e.srcElement.checked ? "addList" : "removeList"](e.srcElement.value === "list1" ? list1Ul : list2Ul);
+    instance.on(document as any, "change", "[type='checkbox']", (e:Event) => {
+        instance[(e.srcElement as any).checked ? "addList" : "removeList"]((e.srcElement as any).value === "list1" ? list1Ul : list2Ul);
     });
 });
