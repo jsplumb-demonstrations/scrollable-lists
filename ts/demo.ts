@@ -28,45 +28,43 @@ ready(() => {
     // get uls
     const lists = document.querySelectorAll("ul");
 
+    instance.registerConnectionType("link", {
+        anchors: [ ["Left", "Right" ], ["Left", "Right" ] ]
+    })
+
     // suspend drawing and initialise.
     instance.batch(function () {
 
-        const selectedSources = [], selectedTargets = [];
+        const selectedSources:Array<Element> = [], selectedTargets:Array<Element> = [];
 
+        // add all list elements to the list of elements managed by the instance
+        instance.manageAll(document.querySelectorAll(".list ul li"))
+
+        // register a selector for drag
+        instance.addSourceSelector("[source] li", {
+            allowLoopback: false,
+            edgeType:"link"
+        });
+
+        // and a selector for drop
+        instance.addTargetSelector("[target] li", {
+            anchor: ["Left", "Right" ]
+        });
+
+        // this code is just to select a few random elements to connect
         for (let l = 0; l < lists.length; l++) {
-
-            const isSource = lists[l].getAttribute("source") != null,
-                isTarget = lists[l].getAttribute("target") != null
-
-            // configure items
-            const items = lists[l].querySelectorAll("li")
+            const isSource = lists[l].getAttribute("source") != null;
+            const items = lists[l].querySelectorAll("li");
             for (let i = 0; i < items.length; i++) {
-
-                if (isSource) {
-                    instance.makeSource(items[i], {
-                        allowLoopback: false,
-                        anchor: ["Left", "Right" ]
-                    });
-
-                    if (Math.random() < 0.2) {
-                        selectedSources.push(items[i]);
-                    }
-                }
-
-                if (isTarget) {
-                    instance.makeTarget(items[i], {
-                        anchor: ["Left", "Right" ]
-                    });
-                    if (Math.random() < 0.2) {
-                        selectedTargets.push(items[i]);
-                    }
+                if (Math.random() < 0.2) {
+                    (isSource ? selectedSources : selectedTargets).push(items[i])
                 }
             }
         }
 
         const connCount = Math.min(selectedSources.length, selectedTargets.length);
         for (let i = 0; i < connCount; i++) {
-            instance.connect({source:selectedSources[i], target:selectedTargets[i]});
+            instance.connect({source:selectedSources[i], target:selectedTargets[i], type:"link"});
         }
     });
 
@@ -75,7 +73,6 @@ ready(() => {
     instance.addList(list1Ul, {
         endpoint:{type:"Rectangle", options:{width:20, height:20}}
     });
-
 
     instance.bind(EVENT_CLICK, (c:Connection) => { instance.deleteConnection(c) })
 

@@ -25,45 +25,39 @@ jsPlumbBrowserUI.ready(function () {
     // get uls
     var lists = document.querySelectorAll("ul");
 
+    instance.registerConnectionType("link", {
+        anchors: [ ["Left", "Right" ], ["Left", "Right" ] ]
+    })
+
     // suspend drawing and initialise.
     instance.batch(function () {
 
         var selectedSources = [], selectedTargets = [];
 
+        instance.manageAll(document.querySelectorAll(".list ul li"))
+
         for (var l = 0; l < lists.length; l++) {
-
-            var isSource = lists[l].getAttribute("source") != null,
-                isTarget = lists[l].getAttribute("target") != null;
-
-            // configure items
+            var isSource = lists[l].getAttribute("source") != null;
             var items = lists[l].querySelectorAll("li");
             for (var i = 0; i < items.length; i++) {
-
-                if (isSource) {
-                    instance.makeSource(items[i], {
-                        allowLoopback: false,
-                        anchor: ["Left", "Right" ]
-                    });
-
-                    if (Math.random() < 0.2) {
-                        selectedSources.push(items[i]);
-                    }
-                }
-
-                if (isTarget) {
-                    instance.makeTarget(items[i], {
-                        anchor: ["Left", "Right" ]
-                    });
-                    if (Math.random() < 0.2) {
-                        selectedTargets.push(items[i]);
-                    }
+                if (Math.random() < 0.2) {
+                    (isSource ? selectedSources : selectedTargets).push(items[i])
                 }
             }
         }
 
+        instance.addSourceSelector("[source] li", {
+            allowLoopback: false,
+            edgeType:"link"
+        });
+
+        instance.addTargetSelector("[target] li", {
+            anchor: ["Left", "Right" ]
+        });
+
         var connCount = Math.min(selectedSources.length, selectedTargets.length);
         for (var i = 0; i < connCount; i++) {
-            instance.connect({source:selectedSources[i], target:selectedTargets[i]});
+            instance.connect({source:selectedSources[i], target:selectedTargets[i], type:"link"});
         }
     });
 
@@ -72,7 +66,6 @@ jsPlumbBrowserUI.ready(function () {
     instance.addList(list1Ul, {
         endpoint:{type:"Rectangle", options:{width:20, height:20}}
     });
-
 
     instance.bind("click", function(c) { instance.deleteConnection(c); });
 
